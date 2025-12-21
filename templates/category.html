@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category }} - Blog2MD{% endblock %}
+
+{% block content %}
+<div class="mb-12">
+    <nav class="flex text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+            <li><a href="/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Home</a></li>
+            <li>
+                <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </li>
+            <li class="text-gray-900 dark:text-gray-200 font-medium" aria-current="page">{{ category }}</li>
+        </ol>
+    </nav>
+    
+    <div class="flex items-end justify-between border-b border-gray-200 dark:border-gray-800 pb-6">
+        <div class="flex items-center gap-4">
+            <div class="h-14 w-14 rounded-xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                <span class="text-2xl font-bold uppercase font-display">{{ category[:1] }}</span>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-display">{{ category }}</h1>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1">Collection of articles</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+             <div class="hidden sm:block text-right">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white font-display">{{ articles|length }}</div>
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Articles</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for article in articles %}
+    <div class="group relative flex flex-col bg-white dark:bg-gray-800/50 rounded-xl p-5 border border-gray-200 dark:border-gray-700/50 hover:border-primary-300 dark:hover:border-primary-500/50 transition-all duration-200 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-1 h-full">
+        
+        <div class="flex items-start justify-between mb-4">
+            <div class="flex-shrink-0">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors ring-1 ring-gray-100 dark:ring-gray-700 group-hover:ring-primary-100 dark:group-hover:ring-primary-900/30">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                </span>
+            </div>
+            
+            <div class="z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <button onclick="deleteArticle(event, '{{ category }}', '{{ article.name }}')" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors" title="Delete Article">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col min-w-0">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white line-clamp-2 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                <a href="/article/{{ category | quote }}/{{ article.name | quote }}" class="focus:outline-none before:absolute before:inset-0">
+                    {{ article.name }}
+                </a>
+            </h3>
+            
+            <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-100 dark:border-gray-700/50">
+                <span class="inline-flex items-center text-xs font-medium text-gray-500 dark:text-gray-400">
+                    <svg class="w-3.5 h-3.5 mr-1.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    {{ article.date_display }}
+                </span>
+                <span class="text-xs font-bold text-primary-600 dark:text-primary-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    Read
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if not articles %}
+    <div class="flex flex-col items-center justify-center py-24 bg-white dark:bg-gray-800/50 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+        <div class="p-4 rounded-full bg-gray-50 dark:bg-gray-800 mb-4">
+            <svg class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+        </div>
+        <p class="text-gray-500 dark:text-gray-400 font-medium">No articles found in this category.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+async function deleteArticle(event, category, article) {
+    event.preventDefault(); 
+    event.stopPropagation();
+    
+    openDeleteModal(
+        'Delete Article',
+        `Are you sure you want to delete the article "${article}"?`,
+        async () => {
+            try {
+                const response = await fetch(`/api/article/${encodeURIComponent(category)}/${encodeURIComponent(article)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showToast(`Article "${article}" deleted successfully`, 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    const data = await response.json();
+                    showToast(`Error: ${data.detail || 'Failed to delete article'}`, 'error');
+                }
+            } catch (error) {
+                showToast('An error occurred while deleting the article', 'error');
+                console.error(error);
+            }
+        }
+    );
+}
+</script>
+{% endblock %}

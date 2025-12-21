@@ -1,0 +1,15 @@
+Markdown
+requests
+beautifulsoup4
+fastapi
+langchain_community
+langchain_core
+langchain_deepseek
+langchain_openai
+pydantic
+python-dotenv
+uvicorn[standard]
+xhtml2pdf
+jinja2
+urllib3
+Pygments

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  blog2md:
+    build: .
+    container_name: blog2md
+    ports:
+      # Map host port to container port 8000
+      # Usage: PORT=9000 docker-compose up
+      - "${PORT:-8000}:8000"
+    volumes:
+      # Map output directory to local folder
+      - ./output:/app/output
+      # Map fonts directory if you want to add custom fonts dynamically (optional)
+      # - ./fonts:/app/fonts
+    env_file:
+      - .env
+    restart: unless-stopped

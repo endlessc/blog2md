@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Blog2MD{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-10 border-b border-gray-200 dark:border-gray-800 pb-8">
+        <nav class="flex text-sm text-gray-500 dark:text-gray-400 mb-6 overflow-x-auto whitespace-nowrap pb-2" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                <li><a href="/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                    Home
+                </a></li>
+                
+                {% for crumb in breadcrumbs %}
+                <li>
+                    <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </li>
+                <li><a href="/browse/{{ crumb.path }}" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">{{ crumb.name }}</a></li>
+                {% endfor %}
+                
+                <li>
+                    <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </li>
+                <li class="text-gray-900 dark:text-gray-200 truncate max-w-xs" aria-current="page" title="{{ title }}">{{ title }}</li>
+            </ol>
+        </nav>
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="space-y-4">
+                <div class="flex flex-wrap gap-2">
+                    {% for crumb in breadcrumbs %}
+                    <span class="inline-flex items-center rounded-lg bg-primary-50 dark:bg-primary-900/30 px-3 py-1 text-sm font-semibold text-primary-700 dark:text-primary-400 ring-1 ring-inset ring-primary-700/10 dark:ring-primary-400/20 shadow-sm">{{ crumb.name }}</span>
+                    {% endfor %}
+                </div>
+
+            <div class="flex items-center gap-3">
+                <a href="/download/md/{{ path | quote }}" download class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-all shadow-sm">
+                    <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Markdown
+                </a>
+                
+                <a href="/download/pdf/{{ path | quote }}" download class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-all shadow-sm">
+                    <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    PDF
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <article class="prose prose-slate dark:prose-invert max-w-none 
+        prose-headings:font-display prose-headings:font-bold prose-headings:my-4
+        prose-h1:text-3xl prose-h1:tracking-tight prose-h1:mb-6
+        prose-p:my-3 prose-p:leading-relaxed
+        prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
+        prose-img:rounded-xl prose-img:shadow-lg prose-img:my-6
+        prose-ul:my-3 prose-li:my-1
+        prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-700
+        prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-code:bg-primary-50 dark:prose-code:bg-primary-900/20 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+        <div class="markdown-body bg-transparent p-0 font-sans">
+            {{ content | safe }}
+        </div>
+    </article>
+
+    <div class="mt-16 pt-10 border-t border-gray-200 dark:border-gray-800 flex justify-between items-center">
+        <a href="/browse/{{ category | quote }}" class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group">
+            <svg class="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to {{ category }}
+        </a>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors group">
+            Back to Top
+            <svg class="ml-2 h-4 w-4 transition-transform group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        </button>
+    </div>
+</div>
+{% endblock %}

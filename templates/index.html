@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Blog2MD{% endblock %}
+
+{% block content %}
+<div class="space-y-12">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-gray-200 dark:border-gray-800">
+        <div class="space-y-2">
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white font-display">
+                My Knowledge Base
+            </h1>
+            <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl">
+                Turn articles into your personal knowledge library. Clean, organized, and always accessible.
+            </p>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="hidden md:block text-right">
+                <div class="text-2xl font-bold text-gray-900 dark:text-white font-display">{{ categories|length }}</div>
+                <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Collections</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Grid -->
+    <div id="categories" class="space-y-6">
+        <!-- Section Title removed as it is now redundant with the main header -->
+        
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {% for category in categories %}
+            <div class="group relative flex flex-col overflow-hidden rounded-2xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50 hover:border-primary-300 dark:hover:border-primary-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1">
+                <!-- Card content -->
+                <div class="p-6 flex flex-col h-full">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/40 dark:to-primary-800/40 text-primary-600 dark:text-primary-400 shadow-inner">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
+                             <button onclick="deleteCategory(event, '{{ category }}')" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors relative z-20" title="Delete Category">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors mb-2">
+                            <a href="/category/{{ category | quote }}" class="focus:outline-none before:absolute before:inset-0">
+                                {{ category }}
+                            </a>
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                            Explore your collection of articles saved under {{ category }}.
+                        </p>
+                    </div>
+
+                    <div class="mt-6 flex items-center text-sm font-medium text-primary-600 dark:text-primary-400 opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                        View Articles 
+                        <svg class="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if not categories %}
+            <div class="col-span-full flex flex-col items-center justify-center py-24 bg-white dark:bg-gray-800/50 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700">
+                <div class="p-4 rounded-full bg-gray-50 dark:bg-gray-800 mb-4">
+                    <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">No categories yet</h3>
+                <p class="mt-2 text-gray-500 dark:text-gray-400 max-w-sm text-center">Your library is empty. Start by fetching an article from the web.</p>
+                <button onclick="openModal()" class="mt-6 px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400 rounded-lg text-sm font-medium hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors">
+                    Fetch first article
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+async function deleteCategory(event, category) {
+    event.preventDefault(); 
+    event.stopPropagation();
+    
+    openDeleteModal(
+        'Delete Category',
+        `Are you sure you want to delete the category "${category}"? This will delete all articles inside it.`,
+        async () => {
+            try {
+                const response = await fetch(`/api/category/${encodeURIComponent(category)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showToast(`Category "${category}" deleted successfully`, 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    const data = await response.json();
+                    showToast(`Error: ${data.detail || 'Failed to delete category'}`, 'error');
+                }
+            } catch (error) {
+                showToast('An error occurred while deleting the category', 'error');
+                console.error(error);
+            }
+        }
+    );
+}
+</script>
+{% endblock %}
